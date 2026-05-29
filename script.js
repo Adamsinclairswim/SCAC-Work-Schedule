@@ -1,49 +1,39 @@
-const days = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday"
-];
+const hoursByDay = {
+  Monday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
+  Tuesday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
+  Wednesday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
+  Thursday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
+  Friday: ["5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM"],
+  Saturday: ["6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM"],
+  Sunday: ["6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM"]
+};
 
-const shifts = [
-  "Opening",
-  "Morning",
-  "Midday",
-  "Afternoon",
-  "Closing"
-];
-
-const availabilityGrid = document.getElementById("availabilityGrid");
+const availabilityArea = document.getElementById("availabilityArea");
 const submitBtn = document.getElementById("submitBtn");
 const message = document.getElementById("message");
 
-function buildAvailabilityGrid() {
-  days.forEach(day => {
+function buildAvailabilityForm() {
+  for (const day in hoursByDay) {
     const dayBox = document.createElement("div");
-    dayBox.classList.add("day-box");
+    dayBox.className = "day-box";
 
-    const title = document.createElement("h3");
-    title.textContent = day;
-    dayBox.appendChild(title);
+    dayBox.innerHTML = `<h3>${day}</h3>`;
 
-    const row = document.createElement("div");
-    row.classList.add("checkbox-grid");
+    const grid = document.createElement("div");
+    grid.className = "checkbox-grid";
 
-    shifts.forEach(shift => {
+    hoursByDay[day].forEach(shift => {
       const label = document.createElement("label");
       label.innerHTML = `
         <input type="checkbox" class="availability" data-day="${day}" value="${shift}" />
         ${shift}
       `;
-      row.appendChild(label);
+      grid.appendChild(label);
     });
 
-    dayBox.appendChild(row);
-    availabilityGrid.appendChild(dayBox);
-  });
+    dayBox.appendChild(grid);
+    availabilityArea.appendChild(dayBox);
+  }
 }
 
 function getSelectedRoles() {
@@ -53,14 +43,13 @@ function getSelectedRoles() {
 function getAvailability() {
   const availability = {};
 
-  days.forEach(day => {
+  for (const day in hoursByDay) {
     availability[day] = [];
-  });
+  }
 
   document.querySelectorAll(".availability:checked").forEach(box => {
     const day = box.dataset.day;
-    const shift = box.value;
-    availability[day].push(shift);
+    availability[day].push(box.value);
   });
 
   return availability;
@@ -68,8 +57,8 @@ function getAvailability() {
 
 function getDateRange(start, end) {
   const dates = [];
-  const current = new Date(start);
-  const final = new Date(end);
+  const current = new Date(start + "T00:00:00");
+  const final = new Date(end + "T00:00:00");
 
   while (current <= final) {
     dates.push(current.toISOString().split("T")[0]);
@@ -79,7 +68,7 @@ function getDateRange(start, end) {
   return dates;
 }
 
-function submitAvailability() {
+function submitForm() {
   const name = document.getElementById("employeeName").value.trim();
   const roles = getSelectedRoles();
   const availability = getAvailability();
@@ -102,24 +91,24 @@ function submitAvailability() {
 
   const existingIndex = employees.findIndex(emp => emp.name.toLowerCase() === name.toLowerCase());
 
-  const employeeData = {
+  const employee = {
     name,
     roles,
     availability
   };
 
   if (existingIndex >= 0) {
-    employees[existingIndex] = employeeData;
+    employees[existingIndex] = employee;
   } else {
-    employees.push(employeeData);
+    employees.push(employee);
   }
 
   localStorage.setItem("employees", JSON.stringify(employees));
 
   if (timeOffStart && timeOffEnd) {
-    let timeOffRequests = JSON.parse(localStorage.getItem("timeOffRequests")) || [];
+    let requests = JSON.parse(localStorage.getItem("timeOffRequests")) || [];
 
-    timeOffRequests.push({
+    requests.push({
       name,
       start: timeOffStart,
       end: timeOffEnd,
@@ -127,11 +116,11 @@ function submitAvailability() {
       reason: timeOffReason || "No reason given"
     });
 
-    localStorage.setItem("timeOffRequests", JSON.stringify(timeOffRequests));
+    localStorage.setItem("timeOffRequests", JSON.stringify(requests));
   }
 
   message.textContent = "Submitted successfully!";
 }
 
-buildAvailabilityGrid();
-submitBtn.addEventListener("click", submitAvailability);
+buildAvailabilityForm();
+submitBtn.addEventListener("click", submitForm);

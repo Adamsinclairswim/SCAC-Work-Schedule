@@ -1,25 +1,34 @@
 const employees = JSON.parse(localStorage.getItem("employees")) || [];
 const timeOffRequests = JSON.parse(localStorage.getItem("timeOffRequests")) || [];
 
-const generateBtn = document.getElementById("generateBtn");
-const saveScheduleBtn = document.getElementById("saveScheduleBtn");
-const clearScheduleBtn = document.getElementById("clearScheduleBtn");
-const clearRequestsBtn = document.getElementById("clearRequestsBtn");
+const hoursByDay = {
+  Monday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
+  Tuesday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
+  Wednesday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
+  Thursday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
+  Friday: ["5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM"],
+  Saturday: ["6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM"],
+  Sunday: ["6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM"]
+};
 
+const cleaningByDay = {
+  Monday: ["11AM-12PM", "3PM-4PM"],
+  Tuesday: ["11AM-12PM"],
+  Wednesday: ["11AM-12PM", "3PM-4PM"],
+  Thursday: ["11AM-12PM", "2PM-3PM"],
+  Friday: ["8AM-9AM", "2PM-3PM"],
+  Saturday: ["9AM-10AM", "12PM-1PM"],
+  Sunday: ["9AM-10AM", "12PM-1PM"]
+};
+
+const auraSpots = ["Aura 1", "Aura 2", "Aura 3", "Aura 4", "Aura 5", "Aura 6", "Aura 7"];
+
+const generateBtn = document.getElementById("generateBtn");
+const saveBtn = document.getElementById("saveBtn");
+const clearBtn = document.getElementById("clearBtn");
 const scheduleArea = document.getElementById("scheduleArea");
 const employeeList = document.getElementById("employeeList");
 const timeOffList = document.getElementById("timeOffList");
-
-const requiredShifts = [
-  { role: "Front Desk", shift: "Opening" },
-  { role: "Front Desk", shift: "Midday" },
-  { role: "Front Desk", shift: "Closing" },
-  { role: "Lifeguard", shift: "Morning" },
-  { role: "Lifeguard", shift: "Afternoon" },
-  { role: "Swim Instructor", shift: "Afternoon" },
-  { role: "Aura Coverage", shift: "Midday" },
-  { role: "Cleaning", shift: "Closing" }
-];
 
 function getDayName(dateString) {
   const date = new Date(dateString + "T00:00:00");
@@ -28,8 +37,8 @@ function getDayName(dateString) {
 
 function getDateRange(start, end) {
   const dates = [];
-  const current = new Date(start);
-  const final = new Date(end);
+  const current = new Date(start + "T00:00:00");
+  const final = new Date(end + "T00:00:00");
 
   while (current <= final) {
     dates.push(current.toISOString().split("T")[0]);
@@ -39,123 +48,116 @@ function getDateRange(start, end) {
   return dates;
 }
 
-function isOnTimeOff(employeeName, date) {
+function isOnTimeOff(name, date) {
   return timeOffRequests.some(request => {
-    return request.name.toLowerCase() === employeeName.toLowerCase() &&
+    return request.name.toLowerCase() === name.toLowerCase() &&
            request.dates.includes(date);
   });
 }
 
-function getAvailableEmployees(date, role, shift) {
-  const day = getDayName(date);
+function getAvailableEmployees(date, day, role, shift) {
+  return employees.filter(emp => {
+    const hasRole = emp.roles.includes(role);
+    const available = emp.availability[day] && emp.availability[day].includes(shift);
+    const off = isOnTimeOff(emp.name, date);
 
-  return employees.filter(employee => {
-    const canWorkRole = employee.roles.includes(role);
-    const canWorkShift = employee.availability[day]?.includes(shift);
-    const blockedByTimeOff = isOnTimeOff(employee.name, date);
-
-    return canWorkRole && canWorkShift && !blockedByTimeOff;
+    return hasRole && available && !off;
   });
 }
 
-function renderEmployees() {
-  if (employees.length === 0) {
-    employeeList.innerHTML = "<p>No employee submissions yet.</p>";
-    return;
-  }
+function createDropdown(date, day, role, shift, label) {
+  const available = getAvailableEmployees(date, day, role, shift);
 
-  employeeList.innerHTML = employees.map(employee => `
-    <div class="employee-card">
-      <strong>${employee.name}</strong>
-      <p><b>Roles:</b> ${employee.roles.join(", ")}</p>
-    </div>
-  `).join("");
-}
+  let options = `<option value="">Choose employee</option>`;
 
-function renderTimeOff() {
-  if (timeOffRequests.length === 0) {
-    timeOffList.innerHTML = "<p>No time off requests yet.</p>";
-    return;
-  }
+  available.forEach(emp => {
+    options += `<option value="${emp.name}">${emp.name}</option>`;
+  });
 
-  timeOffList.innerHTML = timeOffRequests.map(request => `
-    <div class="employee-card">
-      <strong>${request.name}</strong>
-      <p><b>Dates:</b> ${request.start} to ${request.end}</p>
-      <p><b>Reason:</b> ${request.reason}</p>
-    </div>
-  `).join("");
+  return `
+    <tr>
+      <td>${date}</td>
+      <td>${day}</td>
+      <td>${role}</td>
+      <td>${label}</td>
+      <td>${shift}</td>
+      <td>
+        <select class="assignment" data-date="${date}" data-shift="${shift}">
+          ${options}
+        </select>
+      </td>
+      <td>${available.length > 0 ? `<span class="good">${available.length} available</span>` : `<span class="bad">No one available</span>`}</td>
+    </tr>
+  `;
 }
 
 function generateSchedule() {
-  const start = document.getElementById("scheduleStart").value;
-  const end = document.getElementById("scheduleEnd").value;
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
 
   if (!start || !end) {
-    scheduleArea.innerHTML = "<p class='warning'>Please select a start and end date.</p>";
+    scheduleArea.innerHTML = `<p class="bad">Please select a start and end date.</p>`;
     return;
   }
 
   const dates = getDateRange(start, end);
 
-  let html = `<div class="table-wrap"><table>
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Day</th>
-        <th>Role</th>
-        <th>Shift</th>
-        <th>Assign Employee</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
+  let html = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Role</th>
+            <th>Position</th>
+            <th>Shift</th>
+            <th>Assign</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
   `;
 
   dates.forEach(date => {
-    requiredShifts.forEach(item => {
-      const available = getAvailableEmployees(date, item.role, item.shift);
+    const day = getDayName(date);
+    const shifts = hoursByDay[day] || [];
 
-      const options = available.map(emp => `
-        <option value="${emp.name}">${emp.name}</option>
-      `).join("");
+    shifts.forEach(shift => {
+      html += createDropdown(date, day, "Front Desk", shift, "Front Desk");
+    });
 
-      html += `
-        <tr>
-          <td>${date}</td>
-          <td>${getDayName(date)}</td>
-          <td>${item.role}</td>
-          <td>${item.shift}</td>
-          <td>
-            <select class="assignment" data-date="${date}" data-shift="${item.shift}">
-              <option value="">Choose employee</option>
-              ${options}
-            </select>
-          </td>
-          <td>
-            ${available.length > 0 
-              ? `<span class="good">${available.length} available</span>` 
-              : `<span class="warning">No one available</span>`}
-          </td>
-        </tr>
-      `;
+    shifts.forEach(shift => {
+      auraSpots.forEach(spot => {
+        html += createDropdown(date, day, "Aura", shift, spot);
+      });
+    });
+
+    const cleaningShifts = cleaningByDay[day] || [];
+
+    cleaningShifts.forEach(shift => {
+      html += createDropdown(date, day, "Cleaning", shift, "Cleaning");
     });
   });
 
-  html += `</tbody></table></div>`;
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
   scheduleArea.innerHTML = html;
 
   document.querySelectorAll(".assignment").forEach(select => {
-    select.addEventListener("change", checkDuplicateAssignments);
+    select.addEventListener("change", preventDuplicateAssignments);
   });
 }
 
-function checkDuplicateAssignments() {
-  const assignments = Array.from(document.querySelectorAll(".assignment"));
+function preventDuplicateAssignments() {
+  const selects = document.querySelectorAll(".assignment");
   const used = {};
 
-  assignments.forEach(select => {
-    select.classList.remove("duplicate");
+  selects.forEach(select => {
     const employee = select.value;
     const date = select.dataset.date;
     const shift = select.dataset.shift;
@@ -165,7 +167,7 @@ function checkDuplicateAssignments() {
     const key = `${employee}-${date}-${shift}`;
 
     if (used[key]) {
-      alert(`${employee} is already assigned to ${shift} on ${date}.`);
+      alert(`${employee} is already assigned during ${shift} on ${date}.`);
       select.value = "";
     } else {
       used[key] = true;
@@ -184,7 +186,8 @@ function saveSchedule() {
         date: row.children[0].textContent,
         day: row.children[1].textContent,
         role: row.children[2].textContent,
-        shift: row.children[3].textContent,
+        position: row.children[3].textContent,
+        shift: row.children[4].textContent,
         employee: select.value
       });
     }
@@ -195,23 +198,42 @@ function saveSchedule() {
 }
 
 function clearSchedule() {
-  if (confirm("Clear the saved schedule?")) {
-    localStorage.removeItem("savedSchedule");
-    scheduleArea.innerHTML = "<p>Schedule cleared.</p>";
-  }
+  localStorage.removeItem("savedSchedule");
+  scheduleArea.innerHTML = "<p>Saved schedule cleared.</p>";
 }
 
-function clearRequests() {
-  if (confirm("Clear all time off requests?")) {
-    localStorage.removeItem("timeOffRequests");
-    location.reload();
+function renderEmployees() {
+  if (employees.length === 0) {
+    employeeList.innerHTML = "<p>No employees submitted yet.</p>";
+    return;
   }
+
+  employeeList.innerHTML = employees.map(emp => `
+    <div class="employee-card">
+      <strong>${emp.name}</strong>
+      <p>${emp.roles.join(", ")}</p>
+    </div>
+  `).join("");
+}
+
+function renderTimeOff() {
+  if (timeOffRequests.length === 0) {
+    timeOffList.innerHTML = "<p>No time off requests yet.</p>";
+    return;
+  }
+
+  timeOffList.innerHTML = timeOffRequests.map(req => `
+    <div class="employee-card">
+      <strong>${req.name}</strong>
+      <p>${req.start} to ${req.end}</p>
+      <p>${req.reason}</p>
+    </div>
+  `).join("");
 }
 
 generateBtn.addEventListener("click", generateSchedule);
-saveScheduleBtn.addEventListener("click", saveSchedule);
-clearScheduleBtn.addEventListener("click", clearSchedule);
-clearRequestsBtn.addEventListener("click", clearRequests);
+saveBtn.addEventListener("click", saveSchedule);
+clearBtn.addEventListener("click", clearSchedule);
 
 renderEmployees();
 renderTimeOff();

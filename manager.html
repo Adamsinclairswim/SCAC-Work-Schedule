@@ -3,28 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manager Schedule Builder</title>
+  <title>SCAC Manager Schedule</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <h1>Manager Schedule Builder</h1>
-    <a href="index.html" class="nav-btn">Employee Page</a>
+  <header>
+    <h1>SCAC Manager Schedule</h1>
+    <a href="index.html">Employee Page</a>
   </header>
 
-  <main class="container">
+  <main>
     <section class="card">
-      <h2>Build Schedule</h2>
+      <h2>Generate Schedule</h2>
 
-      <label for="scheduleStart">Schedule Start Date</label>
-      <input type="date" id="scheduleStart" />
+      <label>Start Date</label>
+      <input type="date" id="startDate" />
 
-      <label for="scheduleEnd">Schedule End Date</label>
-      <input type="date" id="scheduleEnd" />
+      <label>End Date</label>
+      <input type="date" id="endDate" />
 
-      <button id="generateBtn">Generate Schedule Options</button>
-      <button id="saveScheduleBtn">Save Schedule</button>
-      <button id="clearScheduleBtn" class="danger">Clear Schedule</button>
+      <button id="generateBtn">Generate Schedule</button>
+      <button id="saveBtn">Save Schedule</button>
+      <button id="clearBtn" class="danger">Clear Saved Schedule</button>
     </section>
 
     <section class="card">
@@ -33,14 +33,13 @@
     </section>
 
     <section class="card">
-      <h2>Employee Submissions</h2>
+      <h2>Employees</h2>
       <div id="employeeList"></div>
     </section>
 
     <section class="card">
       <h2>Time Off Requests</h2>
       <div id="timeOffList"></div>
-      <button id="clearRequestsBtn" class="danger">Clear All Requests</button>
     </section>
   </main>
 
