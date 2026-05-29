@@ -1,156 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Availability Portal</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Availability</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="topbar">
+    <h1>Employee Availability</h1>
+    <a href="manager.html" class="nav-btn">Manager Page</a>
+  </header>
 
-    <header>
-        <h1>Employee Availability Portal</h1>
-        <p>Submit your availability and shift preferences.</p>
-    </header>
+  <main class="container">
+    <section class="card">
+      <h2>Submit Your Info</h2>
 
-    <main>
+      <label for="employeeName">Name</label>
+      <input type="text" id="employeeName" placeholder="Enter your name" />
 
-        <section class="card">
-            <h2>Employee Information</h2>
+      <h3>Roles You Can Work</h3>
+      <div class="checkbox-grid">
+        <label><input type="checkbox" value="Front Desk" class="role" /> Front Desk</label>
+        <label><input type="checkbox" value="Lifeguard" class="role" /> Lifeguard</label>
+        <label><input type="checkbox" value="Swim Instructor" class="role" /> Swim Instructor</label>
+        <label><input type="checkbox" value="Aura Coverage" class="role" /> Aura Coverage</label>
+        <label><input type="checkbox" value="Cleaning" class="role" /> Cleaning</label>
+      </div>
+    </section>
 
-            <label for="employeeName">Full Name</label>
-            <input type="text" id="employeeName" placeholder="Enter your name">
-        </section>
+    <section class="card">
+      <h2>Availability</h2>
+      <p class="small-text">Check every shift you are available for.</p>
 
+      <div id="availabilityGrid" class="availability-grid"></div>
+    </section>
 
-        <section class="card">
-            <h2>Shifts I Can Work</h2>
+    <section class="card">
+      <h2>Time Off Request</h2>
 
-            <div class="checkbox-grid">
+      <label for="timeOffStart">Start Date</label>
+      <input type="date" id="timeOffStart" />
 
-                <label><input type="checkbox"> 4AM–8AM</label>
-                <label><input type="checkbox"> 5AM–9AM</label>
-                <label><input type="checkbox"> 6AM–10AM</label>
+      <label for="timeOffEnd">End Date</label>
+      <input type="date" id="timeOffEnd" />
 
-                <label><input type="checkbox"> 8AM–12PM</label>
-                <label><input type="checkbox"> 9AM–1PM</label>
+      <label for="timeOffReason">Reason</label>
+      <textarea id="timeOffReason" placeholder="Optional reason"></textarea>
 
-                <label><input type="checkbox"> 10AM–3PM</label>
-                <label><input type="checkbox"> 11AM–3PM</label>
-                <label><input type="checkbox"> 12PM–4PM</label>
+      <button id="submitBtn">Submit Availability</button>
+      <p id="message"></p>
+    </section>
+  </main>
 
-                <label><input type="checkbox"> 2PM–6PM</label>
-                <label><input type="checkbox"> 3PM–7PM</label>
-                <label><input type="checkbox"> 4PM–8PM</label>
-
-                <label><input type="checkbox"> 6PM–10PM</label>
-                <label><input type="checkbox"> 7PM–11PM</label>
-
-            </div>
-        </section>
-
-
-        <section class="card">
-            <h2>Special Roles</h2>
-
-            <div class="checkbox-grid">
-                <label><input type="checkbox"> Aura Coverage</label>
-                <label><input type="checkbox"> Cleaning</label>
-            </div>
-
-        </section>
-
-
-        <section class="card">
-            <h2>Weekly Availability</h2>
-
-            <div class="availability-row">
-                <strong>Monday</strong>
-                <input type="time">
-                <input type="time">
-            </div>
-
-            <div class="availability-row">
-                <strong>Tuesday</strong>
-                <input type="time">
-                <input type="time">
-            </div>
-
-            <div class="availability-row">
-                <strong>Wednesday</strong>
-                <input type="time">
-                <input type="time">
-            </div>
-
-            <div class="availability-row">
-                <strong>Thursday</strong>
-                <input type="time">
-                <input type="time">
-            </div>
-
-            <div class="availability-row">
-                <strong>Friday</strong>
-                <input type="time">
-                <input type="time">
-            </div>
-
-            <div class="availability-row">
-                <strong>Saturday</strong>
-                <input type="time">
-                <input type="time">
-            </div>
-
-            <div class="availability-row">
-                <strong>Sunday</strong>
-                <input type="time">
-                <input type="time">
-            </div>
-
-        </section>
-
-
-        <section class="card">
-            <h2>Time Off Request</h2>
-
-            <label for="timeOffDate">Date</label>
-            <input type="date" id="timeOffDate">
-
-            <label for="timeOffReason">Reason / Notes</label>
-            <textarea id="timeOffReason" placeholder="Optional"></textarea>
-
-        </section>
-
-
-        <section class="card">
-            <h2>Scheduling Preferences</h2>
-
-            <label for="preferredHours">
-                Preferred Hours Per Week
-            </label>
-            <input type="number" id="preferredHours">
-
-            <label for="maxHours">
-                Maximum Hours Per Week
-            </label>
-            <input type="number" id="maxHours">
-
-            <label for="notes">
-                Notes To Manager
-            </label>
-            <textarea id="notes"></textarea>
-
-        </section>
-
-
-        <section class="card">
-            <button id="submitBtn">
-                Submit Availability
-            </button>
-        </section>
-
-    </main>
-
-    <script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>

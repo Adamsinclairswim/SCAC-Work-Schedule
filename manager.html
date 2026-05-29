@@ -1,80 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manager Schedule Builder</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="topbar">
+    <h1>Manager Schedule Builder</h1>
+    <a href="index.html" class="nav-btn">Employee Page</a>
+  </header>
 
-    <header>
-        <h1>Manager Dashboard</h1>
-        <p>Review employee submissions and generate schedules.</p>
-    </header>
+  <main class="container">
+    <section class="card">
+      <h2>Build Schedule</h2>
 
-    <main>
+      <label for="scheduleStart">Schedule Start Date</label>
+      <input type="date" id="scheduleStart" />
 
-        <!-- Employee Submissions -->
+      <label for="scheduleEnd">Schedule End Date</label>
+      <input type="date" id="scheduleEnd" />
 
-        <section class="card">
-            <h2>Employee Submissions</h2>
+      <button id="generateBtn">Generate Schedule Options</button>
+      <button id="saveScheduleBtn">Save Schedule</button>
+      <button id="clearScheduleBtn" class="danger">Clear Schedule</button>
+    </section>
 
-            <div id="employeeSubmissions">
+    <section class="card">
+      <h2>Schedule</h2>
+      <div id="scheduleArea"></div>
+    </section>
 
-                <p>No submissions loaded yet.</p>
+    <section class="card">
+      <h2>Employee Submissions</h2>
+      <div id="employeeList"></div>
+    </section>
 
-            </div>
-        </section>
+    <section class="card">
+      <h2>Time Off Requests</h2>
+      <div id="timeOffList"></div>
+      <button id="clearRequestsBtn" class="danger">Clear All Requests</button>
+    </section>
+  </main>
 
-        <!-- Schedule Controls -->
-
-        <section class="card">
-            <h2>Schedule Generator</h2>
-
-            <button id="generateScheduleBtn">
-                Generate Schedule
-            </button>
-
-        </section>
-
-        <!-- Generated Schedule -->
-
-        <section class="card">
-            <h2>Generated Shift Candidates</h2>
-
-            <div id="generatedSchedule">
-
-                <p>
-                    Generated shift options will appear here.
-                </p>
-
-            </div>
-
-        </section>
-
-        <!-- Final Manager Schedule -->
-
-        <section class="card">
-            <h2>Final Schedule</h2>
-
-            <div id="finalSchedule">
-
-                <p>
-                    Assigned shifts will appear here.
-                </p>
-
-            </div>
-
-            <button id="exportScheduleBtn">
-                Export Schedule
-            </button>
-
-        </section>
-
-    </main>
-
-    <script src="manager.js"></script>
-
+  <script src="manager.js"></script>
 </body>
 </html>
