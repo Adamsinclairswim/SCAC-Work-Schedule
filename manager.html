@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Manager Dashboard</h1>
+        <p>Review employee submissions and generate schedules.</p>
+    </header>
+
+    <main>
+
+        <!-- Employee Submissions -->
+
+        <section class="card">
+            <h2>Employee Submissions</h2>
+
+            <div id="employeeSubmissions">
+
+                <p>No submissions loaded yet.</p>
+
+            </div>
+        </section>
+
+        <!-- Schedule Controls -->
+
+        <section class="card">
+            <h2>Schedule Generator</h2>
+
+            <button id="generateScheduleBtn">
+                Generate Schedule
+            </button>
+
+        </section>
+
+        <!-- Generated Schedule -->
+
+        <section class="card">
+            <h2>Generated Shift Candidates</h2>
+
+            <div id="generatedSchedule">
+
+                <p>
+                    Generated shift options will appear here.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- Final Manager Schedule -->
+
+        <section class="card">
+            <h2>Final Schedule</h2>
+
+            <div id="finalSchedule">
+
+                <p>
+                    Assigned shifts will appear here.
+                </p>
+
+            </div>
+
+            <button id="exportScheduleBtn">
+                Export Schedule
+            </button>
+
+        </section>
+
+    </main>
+
+    <script src="manager.js"></script>
+
+</body>
+</html>
