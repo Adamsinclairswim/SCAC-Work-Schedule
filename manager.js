@@ -1,14 +1,129 @@
-const employees = JSON.parse(localStorage.getItem("employees")) || [];
-const timeOffRequests = JSON.parse(localStorage.getItem("timeOffRequests")) || [];
+const employees =
+  JSON.parse(localStorage.getItem("employees")) || [];
+
+const timeOffRequests =
+  JSON.parse(localStorage.getItem("timeOffRequests")) || [];
+
+const scheduleCalendar =
+  document.getElementById("scheduleCalendar");
+
+const employeeList =
+  document.getElementById("employeeList");
+
+const timeOffList =
+  document.getElementById("timeOffList");
+
+const generateBtn =
+  document.getElementById("generateBtn");
+
+const saveBtn =
+  document.getElementById("saveBtn");
+
+const clearBtn =
+  document.getElementById("clearBtn");
 
 const hoursByDay = {
-  Monday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
-  Tuesday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
-  Wednesday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
-  Thursday: ["4AM-8AM", "5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM", "7PM-11PM"],
-  Friday: ["5AM-9AM", "6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM", "6PM-10PM"],
-  Saturday: ["6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM"],
-  Sunday: ["6AM-10AM", "8AM-12PM", "9AM-1PM", "10AM-3PM", "11AM-3PM", "12PM-4PM", "2PM-6PM", "3PM-7PM", "4PM-8PM"]
+  Monday: [
+    "4AM-8AM",
+    "5AM-9AM",
+    "6AM-10AM",
+    "8AM-12PM",
+    "9AM-1PM",
+    "10AM-3PM",
+    "11AM-3PM",
+    "12PM-4PM",
+    "2PM-6PM",
+    "3PM-7PM",
+    "4PM-8PM",
+    "6PM-10PM",
+    "7PM-11PM"
+  ],
+
+  Tuesday: [
+    "4AM-8AM",
+    "5AM-9AM",
+    "6AM-10AM",
+    "8AM-12PM",
+    "9AM-1PM",
+    "10AM-3PM",
+    "11AM-3PM",
+    "12PM-4PM",
+    "2PM-6PM",
+    "3PM-7PM",
+    "4PM-8PM",
+    "6PM-10PM",
+    "7PM-11PM"
+  ],
+
+  Wednesday: [
+    "4AM-8AM",
+    "5AM-9AM",
+    "6AM-10AM",
+    "8AM-12PM",
+    "9AM-1PM",
+    "10AM-3PM",
+    "11AM-3PM",
+    "12PM-4PM",
+    "2PM-6PM",
+    "3PM-7PM",
+    "4PM-8PM",
+    "6PM-10PM",
+    "7PM-11PM"
+  ],
+
+  Thursday: [
+    "4AM-8AM",
+    "5AM-9AM",
+    "6AM-10AM",
+    "8AM-12PM",
+    "9AM-1PM",
+    "10AM-3PM",
+    "11AM-3PM",
+    "12PM-4PM",
+    "2PM-6PM",
+    "3PM-7PM",
+    "4PM-8PM",
+    "6PM-10PM",
+    "7PM-11PM"
+  ],
+
+  Friday: [
+    "5AM-9AM",
+    "6AM-10AM",
+    "8AM-12PM",
+    "9AM-1PM",
+    "10AM-3PM",
+    "11AM-3PM",
+    "12PM-4PM",
+    "2PM-6PM",
+    "3PM-7PM",
+    "4PM-8PM",
+    "6PM-10PM"
+  ],
+
+  Saturday: [
+    "6AM-10AM",
+    "8AM-12PM",
+    "9AM-1PM",
+    "10AM-3PM",
+    "11AM-3PM",
+    "12PM-4PM",
+    "2PM-6PM",
+    "3PM-7PM",
+    "4PM-8PM"
+  ],
+
+  Sunday: [
+    "6AM-10AM",
+    "8AM-12PM",
+    "9AM-1PM",
+    "10AM-3PM",
+    "11AM-3PM",
+    "12PM-4PM",
+    "2PM-6PM",
+    "3PM-7PM",
+    "4PM-8PM"
+  ]
 };
 
 const cleaningByDay = {
@@ -21,219 +136,329 @@ const cleaningByDay = {
   Sunday: ["9AM-10AM", "12PM-1PM"]
 };
 
-const auraSpots = ["Aura 1", "Aura 2", "Aura 3", "Aura 4", "Aura 5", "Aura 6", "Aura 7"];
-
-const generateBtn = document.getElementById("generateBtn");
-const saveBtn = document.getElementById("saveBtn");
-const clearBtn = document.getElementById("clearBtn");
-const scheduleArea = document.getElementById("scheduleArea");
-const employeeList = document.getElementById("employeeList");
-const timeOffList = document.getElementById("timeOffList");
-
 function getDayName(dateString) {
-  const date = new Date(dateString + "T00:00:00");
-  return date.toLocaleDateString("en-US", { weekday: "long" });
+  const date =
+    new Date(dateString + "T00:00:00");
+
+  return date.toLocaleDateString(
+    "en-US",
+    { weekday: "long" }
+  );
 }
 
-function getDateRange(start, end) {
-  const dates = [];
-  const current = new Date(start + "T00:00:00");
-  const final = new Date(end + "T00:00:00");
+function addDays(dateString, days) {
+  const date =
+    new Date(dateString + "T00:00:00");
 
-  while (current <= final) {
-    dates.push(current.toISOString().split("T")[0]);
-    current.setDate(current.getDate() + 1);
-  }
+  date.setDate(date.getDate() + days);
 
-  return dates;
+  return date.toISOString().split("T")[0];
 }
 
 function isOnTimeOff(name, date) {
   return timeOffRequests.some(request => {
-    return request.name.toLowerCase() === name.toLowerCase() &&
-           request.dates.includes(date);
+    return (
+      request.name.toLowerCase() ===
+      name.toLowerCase()
+      &&
+      request.dates.includes(date)
+    );
   });
 }
 
-function getAvailableEmployees(date, day, role, shift) {
-  return employees.filter(emp => {
-    const hasRole = emp.roles.includes(role);
-    const available = emp.availability[day] && emp.availability[day].includes(shift);
-    const off = isOnTimeOff(emp.name, date);
+function getAvailableEmployees(
+  date,
+  day,
+  role,
+  shift
+) {
+  return employees.filter(employee => {
 
-    return hasRole && available && !off;
+    const roleMatch =
+      employee.roles.includes(role);
+
+    const shiftMatch =
+      employee.availability[day]
+      &&
+      employee.availability[day]
+        .includes(shift);
+
+    const onTimeOff =
+      isOnTimeOff(
+        employee.name,
+        date
+      );
+
+    return (
+      roleMatch &&
+      shiftMatch &&
+      !onTimeOff
+    );
   });
 }
 
-function createDropdown(date, day, role, shift, label) {
-  const available = getAvailableEmployees(date, day, role, shift);
+function createShiftCard(
+  date,
+  day,
+  role,
+  shift
+) {
 
-  let options = `<option value="">Choose employee</option>`;
+  const availableEmployees =
+    getAvailableEmployees(
+      date,
+      day,
+      role,
+      shift
+    );
 
-  available.forEach(emp => {
-    options += `<option value="${emp.name}">${emp.name}</option>`;
+  let options =
+    `<option value="">Select Employee</option>`;
+
+  availableEmployees.forEach(emp => {
+
+    options += `
+      <option value="${emp.name}">
+        ${emp.name}
+      </option>
+    `;
   });
 
   return `
-    <tr>
-      <td>${date}</td>
-      <td>${day}</td>
-      <td>${role}</td>
-      <td>${label}</td>
-      <td>${shift}</td>
-      <td>
-        <select class="assignment" data-date="${date}" data-shift="${shift}">
+    <div class="shift-card ${role.toLowerCase().replace(" ","-")}">
+
+      <p class="shift-role">
+        ${role}
+      </p>
+
+      <p class="shift-time">
+        ${shift}
+      </p>
+
+      ${
+        availableEmployees.length > 0
+        ?
+        `
+        <select
+          class="assignment"
+          data-date="${date}"
+          data-shift="${shift}"
+          data-role="${role}"
+        >
           ${options}
         </select>
-      </td>
-      <td>${available.length > 0 ? `<span class="good">${available.length} available</span>` : `<span class="bad">No one available</span>`}</td>
-    </tr>
+        `
+        :
+        `
+        <p class="no-people">
+          No Available Employees
+        </p>
+        `
+      }
+
+    </div>
   `;
 }
 
 function generateSchedule() {
-  const start = document.getElementById("startDate").value;
-  const end = document.getElementById("endDate").value;
 
-  if (!start || !end) {
-    scheduleArea.innerHTML = `<p class="bad">Please select a start and end date.</p>`;
+  const startDate =
+    document.getElementById("weekStart").value;
+
+  if (!startDate) {
+    alert("Select a week start date.");
     return;
   }
 
-  const dates = getDateRange(start, end);
+  let html = "";
 
-  let html = `
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Day</th>
-            <th>Role</th>
-            <th>Position</th>
-            <th>Shift</th>
-            <th>Assign</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-  `;
+  for (let i = 0; i < 7; i++) {
 
-  dates.forEach(date => {
-    const day = getDayName(date);
-    const shifts = hoursByDay[day] || [];
+    const currentDate =
+      addDays(startDate, i);
 
-    shifts.forEach(shift => {
-      html += createDropdown(date, day, "Front Desk", shift, "Front Desk");
-    });
+    const day =
+      getDayName(currentDate);
+
+    html += `
+      <div class="day-column">
+
+        <div class="day-header">
+          <h3>${day}</h3>
+          <p>${currentDate}</p>
+        </div>
+    `;
+
+    const shifts =
+      hoursByDay[day] || [];
 
     shifts.forEach(shift => {
-      auraSpots.forEach(spot => {
-        html += createDropdown(date, day, "Aura", shift, spot);
-      });
+
+      html += createShiftCard(
+        currentDate,
+        day,
+        "Front Desk",
+        shift
+      );
+
+      html += createShiftCard(
+        currentDate,
+        day,
+        "Aura",
+        shift
+      );
     });
 
-    const cleaningShifts = cleaningByDay[day] || [];
+    const cleaningShifts =
+      cleaningByDay[day] || [];
 
     cleaningShifts.forEach(shift => {
-      html += createDropdown(date, day, "Cleaning", shift, "Cleaning");
+
+      html += createShiftCard(
+        currentDate,
+        day,
+        "Cleaning",
+        shift
+      );
     });
-  });
 
-  html += `
-        </tbody>
-      </table>
-    </div>
-  `;
+    html += `</div>`;
+  }
 
-  scheduleArea.innerHTML = html;
+  scheduleCalendar.innerHTML = html;
 
-  document.querySelectorAll(".assignment").forEach(select => {
-    select.addEventListener("change", preventDuplicateAssignments);
-  });
+  document
+    .querySelectorAll(".assignment")
+    .forEach(select => {
+      select.addEventListener(
+        "change",
+        checkDuplicates
+      );
+    });
 }
 
-function preventDuplicateAssignments() {
-  const selects = document.querySelectorAll(".assignment");
-  const used = {};
+function checkDuplicates() {
 
-  selects.forEach(select => {
-    const employee = select.value;
-    const date = select.dataset.date;
-    const shift = select.dataset.shift;
+  const assignments = {};
 
-    if (!employee) return;
+  document
+    .querySelectorAll(".assignment")
+    .forEach(select => {
 
-    const key = `${employee}-${date}-${shift}`;
+      const employee =
+        select.value;
 
-    if (used[key]) {
-      alert(`${employee} is already assigned during ${shift} on ${date}.`);
-      select.value = "";
-    } else {
-      used[key] = true;
-    }
-  });
+      if (!employee) return;
+
+      const key =
+        employee +
+        "-" +
+        select.dataset.date +
+        "-" +
+        select.dataset.shift;
+
+      if (assignments[key]) {
+
+        alert(
+          employee +
+          " is already assigned during " +
+          select.dataset.shift
+        );
+
+        select.value = "";
+      }
+
+      assignments[key] = true;
+    });
 }
 
 function saveSchedule() {
-  const assignments = [];
 
-  document.querySelectorAll(".assignment").forEach(select => {
-    if (select.value) {
-      const row = select.closest("tr");
+  const schedule = [];
 
-      assignments.push({
-        date: row.children[0].textContent,
-        day: row.children[1].textContent,
-        role: row.children[2].textContent,
-        position: row.children[3].textContent,
-        shift: row.children[4].textContent,
-        employee: select.value
-      });
-    }
-  });
+  document
+    .querySelectorAll(".assignment")
+    .forEach(select => {
 
-  localStorage.setItem("savedSchedule", JSON.stringify(assignments));
-  alert("Schedule saved!");
+      if (select.value) {
+
+        schedule.push({
+          employee: select.value,
+          date: select.dataset.date,
+          shift: select.dataset.shift,
+          role: select.dataset.role
+        });
+      }
+    });
+
+  localStorage.setItem(
+    "savedSchedule",
+    JSON.stringify(schedule)
+  );
+
+  alert("Schedule Saved");
 }
 
 function clearSchedule() {
-  localStorage.removeItem("savedSchedule");
-  scheduleArea.innerHTML = "<p>Saved schedule cleared.</p>";
+
+  localStorage.removeItem(
+    "savedSchedule"
+  );
+
+  location.reload();
 }
 
 function renderEmployees() {
-  if (employees.length === 0) {
-    employeeList.innerHTML = "<p>No employees submitted yet.</p>";
-    return;
-  }
 
-  employeeList.innerHTML = employees.map(emp => `
-    <div class="employee-card">
-      <strong>${emp.name}</strong>
-      <p>${emp.roles.join(", ")}</p>
-    </div>
-  `).join("");
+  employeeList.innerHTML = "";
+
+  employees.forEach(emp => {
+
+    employeeList.innerHTML += `
+      <div class="employee-card">
+        <strong>${emp.name}</strong>
+        <br>
+        Roles:
+        ${emp.roles.join(", ")}
+      </div>
+    `;
+  });
 }
 
 function renderTimeOff() {
-  if (timeOffRequests.length === 0) {
-    timeOffList.innerHTML = "<p>No time off requests yet.</p>";
-    return;
-  }
 
-  timeOffList.innerHTML = timeOffRequests.map(req => `
-    <div class="employee-card">
-      <strong>${req.name}</strong>
-      <p>${req.start} to ${req.end}</p>
-      <p>${req.reason}</p>
-    </div>
-  `).join("");
+  timeOffList.innerHTML = "";
+
+  timeOffRequests.forEach(req => {
+
+    timeOffList.innerHTML += `
+      <div class="employee-card">
+        <strong>${req.name}</strong>
+        <br>
+        ${req.start}
+        →
+        ${req.end}
+        <br>
+        ${req.reason}
+      </div>
+    `;
+  });
 }
 
-generateBtn.addEventListener("click", generateSchedule);
-saveBtn.addEventListener("click", saveSchedule);
-clearBtn.addEventListener("click", clearSchedule);
+generateBtn.addEventListener(
+  "click",
+  generateSchedule
+);
+
+saveBtn.addEventListener(
+  "click",
+  saveSchedule
+);
+
+clearBtn.addEventListener(
+  "click",
+  clearSchedule
+);
 
 renderEmployees();
 renderTimeOff();

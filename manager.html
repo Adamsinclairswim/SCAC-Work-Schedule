@@ -1,48 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SCAC Manager Schedule</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header>
-    <h1>SCAC Manager Schedule</h1>
-    <a href="index.html">Employee Page</a>
-  </header>
 
-  <main>
-    <section class="card">
-      <h2>Generate Schedule</h2>
+<header class="site-header">
+  <div>
+    <h1>SCAC Schedule Manager</h1>
+    <p>Create Weekly Schedule</p>
+  </div>
 
-      <label>Start Date</label>
-      <input type="date" id="startDate" />
+  <a href="index.html" class="header-link">
+    Employee Form
+  </a>
+</header>
 
-      <label>End Date</label>
-      <input type="date" id="endDate" />
+<main class="page-wrapper">
 
-      <button id="generateBtn">Generate Schedule</button>
-      <button id="saveBtn">Save Schedule</button>
-      <button id="clearBtn" class="danger">Clear Saved Schedule</button>
-    </section>
+  <section class="card">
 
-    <section class="card">
-      <h2>Schedule</h2>
-      <div id="scheduleArea"></div>
-    </section>
+    <h2>Schedule Controls</h2>
 
-    <section class="card">
-      <h2>Employees</h2>
-      <div id="employeeList"></div>
-    </section>
+    <label for="weekStart">
+      Week Start Date
+    </label>
 
-    <section class="card">
-      <h2>Time Off Requests</h2>
-      <div id="timeOffList"></div>
-    </section>
-  </main>
+    <input
+      type="date"
+      id="weekStart"
+    >
 
-  <script src="manager.js"></script>
+    <div class="button-row">
+
+      <button id="generateBtn">
+        Generate Schedule
+      </button>
+
+      <button id="saveBtn">
+        Save Schedule
+      </button>
+
+      <button id="clearBtn" class="danger-btn">
+        Clear Schedule
+      </button>
+
+    </div>
+
+  </section>
+
+  <section class="card">
+
+    <h2>Weekly Schedule</h2>
+
+    <p class="helper-text">
+      Each dropdown only shows employees available for that day and shift.
+    </p>
+
+    <div id="scheduleCalendar"></div>
+
+  </section>
+
+  <section class="card">
+
+    <h2>Employee Availability</h2>
+
+    <div id="employeeList"></div>
+
+  </section>
+
+  <section class="card">
+
+    <h2>Time Off Requests</h2>
+
+    <div id="timeOffList"></div>
+
+  </section>
+
+</main>
+
+<script src="manager.js"></script>
+
 </body>
 </html>

@@ -3,47 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SCAC Availability</title>
+  <title>SCAC Employee Availability</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <header>
-    <h1>SCAC Availability</h1>
-    <a href="manager.html">Manager Page</a>
+  <header class="site-header">
+    <div>
+      <h1>SCAC Availability Form</h1>
+      <p>Front Desk, Aura Coverage, and Cleaning</p>
+    </div>
+
+    <a href="manager.html" class="header-link">Manager Page</a>
   </header>
 
-  <main>
+  <main class="page-wrapper">
     <section class="card">
-      <h2>Employee Info</h2>
+      <h2>Employee Information</h2>
 
-      <label>Name</label>
-      <input type="text" id="employeeName" placeholder="Enter your name" />
+      <label for="employeeName">Your Name</label>
+      <input 
+        type="text" 
+        id="employeeName" 
+        placeholder="Enter your name"
+      />
 
       <h3>Roles You Can Work</h3>
-      <label><input type="checkbox" class="role" value="Front Desk" /> Front Desk</label>
-      <label><input type="checkbox" class="role" value="Aura" /> Aura Coverage</label>
-      <label><input type="checkbox" class="role" value="Cleaning" /> Cleaning</label>
+
+      <div class="role-options">
+        <label>
+          <input type="checkbox" class="role" value="Front Desk" />
+          Front Desk
+        </label>
+
+        <label>
+          <input type="checkbox" class="role" value="Aura" />
+          Aura Coverage
+        </label>
+
+        <label>
+          <input type="checkbox" class="role" value="Cleaning" />
+          Cleaning
+        </label>
+      </div>
     </section>
 
     <section class="card">
-      <h2>Availability</h2>
-      <p>Check the time blocks you are available for each day.</p>
+      <h2>Weekly Availability</h2>
+      <p class="helper-text">
+        Select the time blocks you are available for each day.
+        The options change based on SCAC's hours for that day.
+      </p>
+
       <div id="availabilityArea"></div>
     </section>
 
     <section class="card">
-      <h2>Time Off</h2>
+      <h2>Time Off Request</h2>
 
-      <label>Start Date</label>
+      <label for="timeOffStart">Start Date</label>
       <input type="date" id="timeOffStart" />
 
-      <label>End Date</label>
+      <label for="timeOffEnd">End Date</label>
       <input type="date" id="timeOffEnd" />
 
-      <label>Reason</label>
-      <textarea id="timeOffReason" placeholder="Optional"></textarea>
+      <label for="timeOffReason">Reason</label>
+      <textarea 
+        id="timeOffReason" 
+        placeholder="Optional reason"
+      ></textarea>
 
-      <button id="submitBtn">Submit</button>
+      <button id="submitBtn">Submit Availability</button>
+
       <p id="message"></p>
     </section>
   </main>
